@@ -1,10 +1,11 @@
 # Bass Connections - Meeting the Need for Reconstructive Surgery in Palestine
 
+
+injury_df
+- Example dataframe that was used to test the model. Contains the date, cumulative number of injuries in Gaza, and daily number of injuries in Gaza.
+  
 OCHA data
 - Contains information on the total cumulative injuries in Gaza as per the OCHA daily reports (data sourced from the Ministry of Health) and the number of functioning hospitals. The number of daily injuries was manually determined by taking the difference between reported days. The number of daily injuries were also aggregated over a span of 7-12 days and a difference was then taken to get the weekly number of injuries. 
-
-MoH Daily Reports (need to clean up) 
-- Contains the daily number wounded, demographics of those injured (gender and age group), and the number of surgical operations performed. 
 
 Armed Conflict Location and Event Data (ACLED) data
 - Contains information collected from ACLED that details the date of attacks, event type, region of attack (govenorates, city, and latitide and longitude), number of fatalities, and the time stamp of each attack. 
