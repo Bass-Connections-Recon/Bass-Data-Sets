@@ -53,7 +53,7 @@ acled_df_2['attack_category'] = acled_df_2['sub_event_type'].map(attack_type_map
 
 
 # -------------------------------------------------------------------- #
-# 2.1.2 Pre-processing Event Dates
+# Pre-processing Event Dates
 # -------------------------------------------------------------------- #
 acled_df['event_date'] = pd.to_datetime(acled_df['event_date'])    # ensure 'event_date' is in datetime format
 acled_df['year_month'] = acled_df['event_date'].dt.to_period('M')  # for monthly grouping purpose
