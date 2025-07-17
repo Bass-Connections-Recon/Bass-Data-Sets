@@ -13,7 +13,7 @@ from sklearn.linear_model import LassoLars
 from sklearn.linear_model import Lasso
 import matplotlib.dates as mdates
 
-
+#change document location to your own folders
 acled_df = pd.read_excel('ACLED_May_09_25_Gaza.xlsx', 
                          usecols=['event_date', 'sub_event_type', 'latitude', 'longitude', 'fatalities', 'admin2'])
 population_data = pd.read_excel('pop_inf_data.xlsx', sheet_name= 'Population')
@@ -182,7 +182,7 @@ acled_daily = acled_with_injuries.groupby('event_date').agg(
 
 print(acled_daily)
 
-acled_daily.to_excel("/Users/el266/Downloads/acled_daily_05_29_25.xlsx", index=False) ##change save to for your own folder
+acled_daily.to_excel("acled_daily_05_29_25.xlsx", index=False) ##change save to for your own folder
 
 print(acled_daily['injuries'].sum())
 print(acled_daily['rubble_count'].sum())
