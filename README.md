@@ -1,18 +1,25 @@
-# Bass Connections - Meeting the Need for Reconstructive Surgery in Palestine
+# A Computational Approach to Estimating Reconstructive Surgical Need Amidst War in Gaza
 
+## A project by the Duke Bass Connections Team – Meeting the Need for Reconstructive Surgery in Gaza 2024-25
 
-Injury Dataframe (injury_df)
-- Example dataframe that was used to test the model. Contains the date, cumulative number of injuries in Gaza, and daily number of injuries in Gaza.
+### Overview
+This repository contains the code and datasets used to forecast injuries in Gaza during the current conflict. Our aim is to provide a transparent, reproducible model that can help estimate surgical needs both during the ongoing conflict and in its aftermath, recognizing that current infrastructure is severly limited due to the severe destruction. 
   
-OCHA data
-- Contains information on the total cumulative injuries in Gaza as per the OCHA daily reports (data sourced from the Ministry of Health) and the number of functioning hospitals. The number of daily injuries was manually determined by taking the difference between reported days. The number of daily injuries were also aggregated over a span of 7-12 days and a difference was then taken to get the weekly number of injuries. 
+### Who We Are
+We are part of the Duke Bass Connections Team - Meeting the Need for Reconstructive Surgery in Gaza. We are made up of undergraduate, graduate, and postdoctoral researchers, with supervision from academic physicians and faculty who have extensive experience in Middle Eastern conflicts and reconstructive surgery at Duke University, Durham, NC, USA. Any views or statements made herein are our own and do not represent the institution.  
 
-Armed Conflict Location and Event Data (ACLED) data (ACLED_data)
-- Contains information collected from ACLED that details the date of attacks, event type, region of attack (govenorates, city, and latitide and longitude), number of fatalities, and the time stamp of each attack. 
+### Why This Project
+The ongoing conflict in Gaza has caused extensive Palestinian civilian injuries in a setting where access to specialized reconstructive care was already limited. Damage to hospitals, loss of trained personnel, and disrupted supply chains have compounded these challenges. Reliable, contnuous injury data is scarce, making it difficult to plan for the necessary surgical and rehabilitiative infrastrucutre and resources. 
 
-Population Data
-- Contains monthly population information collected from various sources, including satellite imagery and situation reports, to determine population density of the top 20 camps, cities, and townships in Gaza. For locations exceeding 20,000 people/km^2, they were classified as high density. Locations between 20,000 and 5,000 people/km^2 were medium density. Low density locations had under 5000 people/km^2. 
+This project does not seek to assign blame or take a political position. Our focus is entirely humanitarian: to strengthen eveidence-based planning for care delivery under extreme conditioins.
 
-Infrastructure Data
-- Contains monthly infrastructure information from satellite imagery and situation reports. A similar method was used to classify the same 20 locations as either urban, suburbam, rural, or barren. 
+### What We Aim to Do
+- Model injury incidence using injury reports, attack characterization, satellite-based infrastructure damage data, and independent news sources/social media. 
+- Estimate anticipated reconstructive surgery needs for current and future conflict scenarios
+- Offer a transferrable framework adaptable to other conflict or disaster contexts
+
+### Contents
+- Python scripts for data processing and modeling
+- Example datasets
+- Documentation for replicating and adapting the methodology
 
