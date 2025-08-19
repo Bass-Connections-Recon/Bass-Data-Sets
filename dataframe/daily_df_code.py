@@ -52,69 +52,9 @@ acled_df['year_month'] = acled_df['event_date'].dt.to_period('M')  # for monthly
 
 
 # -------------------------------------------------------------------------------------------- #
-# 2.2.1 Helper Functions for Determining Population Density and Infrastructure Type
+# 2.2.1 Function for Determining Population Density and Infrastructure Type
 # -------------------------------------------------------------------------------------------- #
-
-# Function to calculate the Haversine distance between two points (lat, lon)
-def haversine(lat1, lon1, lat2, lon2):
-    return geopy.distance.distance((lat1, lon1), (lat2, lon2)).km
-
-# Function to check if the attack is within the vicinity of any location based on area radius
-def is_attack_in_vicinity(attack_lat, attack_lon, area_data, vicinity_radius):
-    for _, row in area_data.iterrows():
-        distance = haversine(attack_lat, attack_lon, row['latitude'], row['longitude'])
-        if distance <= vicinity_radius:
-            return True
-    return False
-
-# Function to find the closest location for an attack if it's within vicinity
-def find_closest_location(attack_lat, attack_lon, area_data):
-    min_distance = float('inf')
-    closest_idx = None
-    for idx, row in area_data.iterrows():
-        distance = haversine(attack_lat, attack_lon, row['latitude'], row['longitude'])
-        if distance < min_distance:
-            min_distance = distance
-            closest_idx = idx
-    return closest_idx
-
-# Function to get population density and infrastructure setting for an attack
-def get_area_info_for_attack(attack_date, attack_lat, attack_lon, population_data, infrastructure_df, vicinity_radius):
-    
-    # lookup the month
-    lookup_month = attack_date.strftime('%Y-%m')
-
-    # Check if the attack is within the vicinity of any location
-    if not is_attack_in_vicinity(attack_lat, attack_lon, population_data, vicinity_radius):
-        return 'Low', 'Rural', "NA"  # Default values for low density and barren infrastructure
-
-    # Find the closest location
-    closest_idx = find_closest_location(attack_lat, attack_lon, population_data)
-    if closest_idx is None:
-        return 'Low', 'Rural', "NA" # No location found, return defaults
-
-    #get location for the row
-    population_row = population_data.loc[closest_idx]
-    location = population_row['location']
-    
-    # Get the population density for the lookup month (location-specific)
-    density = population_row.get(lookup_month, 'Low')  # Default to 'Low' if no value exists for the month
-
-    # Get the infrastructure type for the lookup month (location-specific)
-    infrastructure_row = infrastructure_df[infrastructure_df['location'] == population_row['location']]
-    if infrastructure_row.empty:
-        return density, 'Rural', "NA"  # Default to 'Rural' if no infrastructure info
-
-    # Extract the infrastructure type for the specific month
-    try:
-        infrastructure_type = infrastructure_row[lookup_month].values[0]
-    except KeyError:
-        infrastructure_type = 'Rural'  # Default to 'Rural' if the month is missing
-    except IndexError:
-        infrastructure_type = 'Rural'  # Handle case where no matching row exists
-
-    return density, infrastructure_type, location
-
+#Given an attack date and location classification, return the population density and infrastructure type 
 def get_area_info_for_attack_two(attack_date, classification, population_data, infrastructure_df):
     # lookup the month
     lookup_month = attack_date.strftime('%Y-%m')
@@ -138,11 +78,7 @@ def get_area_info_for_attack_two(attack_date, classification, population_data, i
         infrastructure_row = infrastructure_row.iloc[0]
         infrastructure_type = infrastructure_row.get(lookup_month, "Rural")
     
-    
-    
     return density, infrastructure_type, classification
-
-
 
 # -------------------------------------------------------------------------------------------- #
 # 2.2.2 Applying Population Density and Infrastructure Information to ACLED Data
@@ -175,7 +111,7 @@ population_density_mapping = {
     'High': 3
 }
 
-# # Apply the mapping to the population_density column
+#Apply the mapping to the population_density column
 acled_df['population_density'] = acled_df['population_density'].map(population_density_mapping)
 print(acled_df)
 
@@ -226,8 +162,6 @@ zone_summary = acled_df.groupby('event_date').agg(
     total_attacks=('zone_id', 'count'),
     new_zone_attacks=('pct_new_zone_attacks', 'sum'),
     avg_pct_new_zone_attacks=('pct_new_zone_attacks', 'mean')
-#    avg_location_lat=('latitude','mean'),
-#    avg_location_long=('longitude','mean')
 ).reset_index()
 
 
@@ -245,10 +179,13 @@ acled_daily = acled_daily.rename(columns={"Daily # of injuries (Gaza)": "injurie
 
 #Merge with zone data
 acled_daily = pd.merge(acled_daily, zone_summary, on='event_date', how='left')
+#calculate 14-day rolling average 
 acled_daily["pct_new_zone_attacks_14d"] = acled_daily["avg_pct_new_zone_attacks"].rolling(14).mean()
+#restrict to data after October 2023
 acled_daily=acled_daily[acled_daily["event_date"] >= "2023-10-01"]
+#save final dataset
+acled_daily.to_excel("acled_daily.xlsx", index=False) #change save location to your local folder
 
-acled_daily.to_excel("acled_daily.xlsx", index=False) ##change save to for your own folder
 
 
 
