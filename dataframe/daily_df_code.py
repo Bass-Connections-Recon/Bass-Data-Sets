@@ -22,7 +22,7 @@ infrastructure_df = pd.read_excel('pop_inf_data.xlsx', sheet_name= 'Infrastructu
 cumulative = pd.read_excel('cumulative_injuries.xlsx',
                           usecols=['Date','Total # of Injuries in Gaza (cumulative from 10/7/23)'])
 # -------------------------------------------------------------------- #
-# 2.1.1 Mapping ACLED Sub-Event Types to Broader Attack Categories
+# Mapping ACLED Sub-Event Types to Broader Attack Categories
 # -------------------------------------------------------------------- #
 
 # Define mapping of attack types to broader categories
@@ -45,14 +45,14 @@ acled_df['attack_category'] = acled_df['sub_event_type'].map(attack_type_mapping
 
 
 # -------------------------------------------------------------------- #
-# 2.1.2 Pre-processing Event Dates
+# Pre-processing Event Dates
 # -------------------------------------------------------------------- #
 acled_df['event_date'] = pd.to_datetime(acled_df['event_date'])    # ensure 'event_date' is in datetime format
 acled_df['year_month'] = acled_df['event_date'].dt.to_period('M')  # for monthly grouping purpose
 
 
 # -------------------------------------------------------------------------------------------- #
-# 2.2.1 Function for Determining Population Density and Infrastructure Type
+# Function for Determining Population Density and Infrastructure Type
 # -------------------------------------------------------------------------------------------- #
 #Given an attack date and location classification, return the population density and infrastructure type 
 def get_area_info_for_attack_two(attack_date, classification, population_data, infrastructure_df):
@@ -81,7 +81,7 @@ def get_area_info_for_attack_two(attack_date, classification, population_data, i
     return density, infrastructure_type, classification
 
 # -------------------------------------------------------------------------------------------- #
-# 2.2.2 Applying Population Density and Infrastructure Information to ACLED Data
+# Applying Population Density and Infrastructure Information to ACLED Data
 # -------------------------------------------------------------------------------------------- #
 
 # Iterate through each row in acled_df to calculate population density and infrastructure for each attack
@@ -102,7 +102,7 @@ for idx, row in acled_df.iterrows():
 
 
 # -------------------------------------------------------------------------------------------- #
-# 2.2.3 Mapping Population Density To Ordinal Values
+# Mapping Population Density To Ordinal Values
 # -------------------------------------------------------------------------------------------- #
 
 population_density_mapping = {
@@ -117,7 +117,7 @@ print(acled_df)
 
 
 # -------------------------------------------------------------------- #
-# 2.3.1 Fixing Date Format and Merging ACLED and Injuries Datasets 
+# Fixing Date Format and Merging ACLED and Injuries Datasets 
 # -------------------------------------------------------------------- #
 
 # Ensure injury_df date column is in the same datetime format as aclef_df
@@ -166,7 +166,7 @@ zone_summary = acled_df.groupby('event_date').agg(
 
 
 # -------------------------------------------------------------------- #
-# 2.3.2 Data Aggregation by Event Date 
+# Data Aggregation by Event Date 
 # -------------------------------------------------------------------- #
 
 grouped = acled_df.groupby(["event_date", "group_key"]).size().reset_index(name="count")
@@ -185,6 +185,7 @@ acled_daily["pct_new_zone_attacks_14d"] = acled_daily["avg_pct_new_zone_attacks"
 acled_daily=acled_daily[acled_daily["event_date"] >= "2023-10-01"]
 #save final dataset
 acled_daily.to_excel("acled_daily.xlsx", index=False) #change save location to your local folder
+
 
 
 
